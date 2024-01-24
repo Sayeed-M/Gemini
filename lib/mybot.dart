@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 class Chatbot extends StatefulWidget {
@@ -13,7 +14,7 @@ class Chatbot extends StatefulWidget {
 
 class _ChatbotState extends State<Chatbot> {
   ChatUser myself = ChatUser(id: '1', firstName: 'sayeed');
-  ChatUser bot = ChatUser(id: '2', firstName: 'Ranger');
+  ChatUser bot = ChatUser(id: '2', firstName: 'Gemini');
 
   List<ChatMessage> allMessage = [];
   List<ChatUser> typing = [];
@@ -61,7 +62,7 @@ class _ChatbotState extends State<Chatbot> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('            MS-Ranger'),
+        title: Center(child: Text('Gemini')),
         backgroundColor: Colors.lightBlueAccent,
         titleTextStyle: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
       ),
@@ -71,6 +72,16 @@ class _ChatbotState extends State<Chatbot> {
           onSend: (ChatMessage m) {
             getdata(m);
           },
+          messageOptions: MessageOptions(
+            onLongPressMessage: (message) {
+              Clipboard.setData(ClipboardData(text: message.text));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Message copied'),
+                ),
+              );
+            },
+          ),
           messages: allMessage),
     );
   }
